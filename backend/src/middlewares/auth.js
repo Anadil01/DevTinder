@@ -4,13 +4,13 @@ const User = require("../models/user");
 
 const userAuth = async (req ,res , next)=>{
     const {token} = req.cookies;
-
+    
     if(!token){
         throw new Error("Token is not valid");
     }
 
     try{
-        const decodedobj = await jwt.verify(token ,process.env.JWT_SECERET);
+        const decodedobj = await jwt.verify(token ,process.env.JWT_SECRET);
         const {_id} = decodedobj;
         
         const user = await User.findById(_id);

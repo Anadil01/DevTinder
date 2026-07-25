@@ -9,8 +9,8 @@ function Profile() {
 
     return ( 
         <div>  
-          <EditProfile user={user}/>
-          <h1>{user?.firstName} {user?.lastName}</h1> 
+          <EditProfile/>
+        
         </div>
      );
 }

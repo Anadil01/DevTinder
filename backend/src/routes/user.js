@@ -101,7 +101,7 @@ try{
   .skip(skip)
   .limit(limit);
 
-
+  
   res.send(users);
 
 }catch(error){
@@ -109,3 +109,6 @@ try{
 }
 
 });
+
+
+module.exports = userRouter;

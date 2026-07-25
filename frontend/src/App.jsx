@@ -27,7 +27,7 @@ function App() {
         dispatch(addUser(res.data));
       } catch (error) {
         console.log(error.response?.status);
-        console.log(error.response?.data);
+        
       }
     };
 
