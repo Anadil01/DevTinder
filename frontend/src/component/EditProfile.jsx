@@ -11,31 +11,27 @@ function EditProfile() {
     const dispatch = useDispatch();
     const user = useSelector((store) => store.user);
 
-    const [firstName , setFirstName] = useState(user.firstName ||"");
-    const [lastName , setLastName] = useState(user.lastName||"");
-    const [age , setAge] = useState(user.age ||"");
-    const [gender , setGender] = useState(user.gender ||"");
-    const [photoUrl , setPhotoUrl] = useState(user.photoUrl||"");
-    const [about , setAbout] = useState(user.about ||"");
-    const [skills , setSkills] = useState(user.skills||[]);
+    const [firstName , setFirstName] = useState(user?.firstName ||"");
+    const [lastName , setLastName] = useState(user?.lastName||"");
+    const [age , setAge] = useState(user?.age ||"");
+    const [gender , setGender] = useState(user?.gender ||"");
+    const [photoUrl , setPhotoUrl] = useState(user?.photoUrl||"");
+    const [about , setAbout] = useState(user?.about ||"");
     
    
 
 
-    const handleEditProfile = async ()=>{
+    const handleEditProfile = async (e)=>{
+      e.preventDefault();
         try{
-            const res = await axios.patch(`${baseUrl}/profile/edit)`, 
-                {firstName , lastName,age , gender, photoUrl , about , skills} , {withCredentials:true});
+            const res = await axios.patch(`${baseUrl}/profile/edit`, 
+                {firstName , lastName, age , gender, photoUrl , about } , {withCredentials:true});
 
           dispatch(addUser(res.data));
         }catch(error){
          console.log(error);
         }
     }
-
-    useEffect(()=>{
-        handleEditProfile();
-    }, []);
 
 
     return ( 
@@ -61,7 +57,7 @@ function EditProfile() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Enter First Name"
-                className="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                className="w-1/2 px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
               />
             </div>
       
@@ -142,20 +138,6 @@ function EditProfile() {
               />
             </div>
       
-            <div>
-              <label className="block text-white mb-2">
-                Skills
-              </label>
-      
-              <input
-                type="text"
-                value={skills}
-                onChange={(e) => setSkills(e.target.value)}
-                placeholder="React, Node.js, MongoDB..."
-                className="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              />
-            </div>
-      
             <button
               type="submit"
               className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition"
@@ -166,8 +148,8 @@ function EditProfile() {
           </form>
         </div>
 
-        <div className="flex justify-center lg:w-[380px]">
-          <UserCard user={{firstName , lastName , age , gender , photoUrl , about , skills}} />
+        <div className="flex justify-center items-center lg:w-[380px] mt-25">
+          <UserCard user={{firstName , lastName , age , gender , photoUrl , about}} />
        </div>
  
         </div>

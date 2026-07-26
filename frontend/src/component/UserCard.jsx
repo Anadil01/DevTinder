@@ -1,4 +1,28 @@
+import axios from "axios";
+import baseUrl from "../utils/constant";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
+import { useState } from "react";
+
 function UserCard({ user }) {
+  const [loading , setLoading] = useState(false);
+    const dispatch = useDispatch();
+
+
+  const handleRequest = async (status , toUserId)=>{
+    if(loading) return;
+    try{
+      setLoading(true)
+    const res = await axios.post(`${baseUrl}/request/send/${status}/${toUserId}`,{}, {withCredentials:true});
+    dispatch(removeUserFromFeed(toUserId));
+    }catch(error){
+      console.log(error.response?.data || error.message);
+    }finally {
+      setLoading(false);
+    }
+  }
+  
+  
   return (
     <div className="relative w-80 h-[560px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900">
 
@@ -41,11 +65,15 @@ function UserCard({ user }) {
 
       <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-8">
 
-        <button className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-2xl transition">
+        <button className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-2xl transition" 
+        disabled={loading}
+        onClick={()=> handleRequest("ignored",user._id)}>
           ✖
         </button>
 
-        <button className="w-16 h-16 rounded-full bg-cyan-500 hover:bg-cyan-600 text-2xl transition">
+        <button className="w-16 h-16 rounded-full bg-cyan-500 hover:bg-cyan-600 text-2xl transition"
+        disabled={loading}
+        onClick={()=> handleRequest("interested" , user._id)}>
           🤝
         </button>
 

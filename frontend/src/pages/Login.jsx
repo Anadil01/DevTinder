@@ -24,9 +24,6 @@ export default function Login() {
       console.log(error.response?.data || error.message);
     }
   }
-  useEffect(()=>{
-    handleLogin();
-  },[]);
 
 
   return (
