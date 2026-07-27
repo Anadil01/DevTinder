@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema(
 
     photoUrl: {
         type: String,
-        default: "https://www.magnific.com/free-photos-vectors/dummy-person",
+        default: "https://t3.ftcdn.net/jpg/07/24/59/76/360_F_724597608_pmo5BsVumFcFyHJKlASG2Y2KpkkfiYUU.jpg",
         validate(str){
             if(!validator.isURL(str)){
                 throw new Error ("Url is not valid!!");

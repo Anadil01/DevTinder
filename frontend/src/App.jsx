@@ -11,6 +11,7 @@ import Feed from "./pages/Feed";
 import ProtectedRoute from "./component/ProtectedRoute";
 import Connection from "./pages/Connection";
 import Request from "./pages/Request";
+import Signup from "./pages/Signup";
 
 import { addUser } from "./utils/userSlice";
 import { baseUrl } from "./utils/constant";
@@ -30,7 +31,9 @@ function App() {
 
         dispatch(addUser(res.data));
       } catch (error) {
-        console.log(error.response?.status);
+        if (error.response?.status === 401) {
+          dispatch(addUser(null));
+      }
         
       }finally {
       setLoading(false);
@@ -54,7 +57,7 @@ function App() {
             <Route path="/" element={<Navigate to="/login" replace/>} />
 
             <Route path="/login" element={ user ? <Navigate to="/feed" replace/> : <Login />} />
-
+            <Route path="/signup" element={ user ? <Navigate to="/feed" replace/> : <Signup />} />
             <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
             <Route path="/feed" element={<ProtectedRoute> <Feed/> </ProtectedRoute>} />
             <Route path="/requests" element={<ProtectedRoute><Request/></ProtectedRoute>} />

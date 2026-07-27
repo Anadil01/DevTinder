@@ -11,14 +11,23 @@ function EditProfile() {
     const dispatch = useDispatch();
     const user = useSelector((store) => store.user);
 
-    const [firstName , setFirstName] = useState(user?.firstName ||"");
-    const [lastName , setLastName] = useState(user?.lastName||"");
-    const [age , setAge] = useState(user?.age ||"");
-    const [gender , setGender] = useState(user?.gender ||"");
-    const [photoUrl , setPhotoUrl] = useState(user?.photoUrl||"");
-    const [about , setAbout] = useState(user?.about ||"");
+    const [firstName , setFirstName] = useState("");
+    const [lastName , setLastName] = useState("");
+    const [age , setAge] = useState("");
+    const [gender , setGender] = useState("");
+    const [photoUrl , setPhotoUrl] = useState("");
+    const [about , setAbout] = useState("");
     
-   
+    useEffect(() => {
+      if (!user) return;
+    
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setAge(user.age || "");
+      setGender(user.gender || "");
+      setPhotoUrl(user.photoUrl || "");
+      setAbout(user.about || "");
+    }, [user]);
 
 
     const handleEditProfile = async (e)=>{

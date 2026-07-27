@@ -1,20 +1,32 @@
 import axios from "axios";
-import baseUrl from "../utils/constant";
+import {baseUrl} from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import { useState } from "react";
 
 function UserCard({ user }) {
   const [loading , setLoading] = useState(false);
+  const [animate , setAnimate] = useState("");
     const dispatch = useDispatch();
 
 
   const handleRequest = async (status , toUserId)=>{
     if(loading) return;
     try{
-      setLoading(true)
-    const res = await axios.post(`${baseUrl}/request/send/${status}/${toUserId}`,{}, {withCredentials:true});
-    dispatch(removeUserFromFeed(toUserId));
+      setLoading(true);
+
+      setAnimate(
+        status === "interested" ? "translate-x-full" : "-translate-x-full"
+      );
+
+
+     await axios.post(`${baseUrl}/request/send/${status}/${toUserId}`,{}, {withCredentials:true});
+
+     setTimeout(() => {
+      dispatch(removeUserFromFeed(toUserId));
+      setAnimate("");
+    }, 300);
+
     }catch(error){
       console.log(error.response?.data || error.message);
     }finally {
@@ -24,7 +36,8 @@ function UserCard({ user }) {
   
   
   return (
-    <div className="relative w-80 h-[560px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900">
+    <div className={`relative w-80 h-[560px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900
+      transition-transform duration-300 ${animate}`}>
 
       <img
         src={user.photoUrl}

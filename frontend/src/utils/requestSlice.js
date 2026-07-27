@@ -10,7 +10,7 @@ const requestSlice = createSlice({
 
     rejectRequest: (state, action) => {
       return state.filter(
-        (request) => request.id !== action.payload
+        (request) => request._id !== action.payload
       );
     },
   },

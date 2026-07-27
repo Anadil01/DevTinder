@@ -12,7 +12,11 @@ authRouter.post("/signup" , async (req ,res)=>{
     validateSignupData(req);
 
     const {firstName , lastName , emailId , password} = req.body;
-
+  
+    const existUser = await User.findOne({emailId:emailId});
+    if(existUser){
+        return res.status(409).json({message:"User already exists"});
+    }
     const hashPassword = await bcrypt.hash(password ,10);
 
     const user = new User({
@@ -21,9 +25,25 @@ authRouter.post("/signup" , async (req ,res)=>{
         emailId,
         password:hashPassword
     });
-
     await user.save();
-    res.send("User Signup Sucessfully!!");
+    const token = await user.getJWT();
+
+    res.cookie("token" , token ,{
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+    });
+   
+    
+    res.status(201).json({
+        message:"User created successfully",
+        user:{
+        _id:user._id,
+        firstName:user.firstName,
+        lastName:user.lastName,
+        emailId:user.emailId
+        },
+    });
 
    }catch(error){
 
@@ -68,9 +88,11 @@ authRouter.post("/login" , async (req , res)=>{
 
 
 authRouter.post("/logout" , async (req , res) =>{
-    res.cookie("token" , null ,{expires: new Date(Date.now())});
+    res.clearCookie("token");
 
-    res.send("Logout Sucessfully!!");
+    res.status(200).json({
+        message: "Logout successfully",
+    });
 })
 
 

@@ -14,7 +14,7 @@ function Feed() {
       const res = await axios.get(`${baseUrl}/feed`, {
         withCredentials: true,
       });
-      console.log(res);
+      
       dispatch(addFeed(res.data));
     } catch (error) {
       console.error(error);
@@ -24,6 +24,8 @@ function Feed() {
   useEffect(() => {
     feedData();
   }, []);
+
+  
   if(!feed) return null;
   if (feed.length === 0) {
     return (
