@@ -13,7 +13,7 @@ requestRouter.post("/request/send/:status/:toUserId" , userAuth , async (req , r
         const toUserId = req.params.toUserId;
         const status = req.params.status;
 
-        const allowedStatus = ["interested" , "ignore"];
+        const allowedStatus = ["interested" , "ignored"];
 
         if(!allowedStatus.includes(status)){
             throw new Error ("Invalid request!");
@@ -37,7 +37,7 @@ requestRouter.post("/request/send/:status/:toUserId" , userAuth , async (req , r
      });
 
      if(existingConnRequest){
-        throw new Error("Connection request already eexist!");
+        throw new Error("Connection request already exist!");
      }
 
         const connectionRequest = new ConnectionRequest({

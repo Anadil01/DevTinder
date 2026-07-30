@@ -22,10 +22,8 @@ function UserCard({ user }) {
 
      await axios.post(`${baseUrl}/request/send/${status}/${toUserId}`,{}, {withCredentials:true});
 
-     setTimeout(() => {
       dispatch(removeUserFromFeed(toUserId));
-      setAnimate("");
-    }, 300);
+   
 
     }catch(error){
       console.log(error.response?.data || error.message);

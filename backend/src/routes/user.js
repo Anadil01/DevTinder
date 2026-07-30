@@ -6,7 +6,7 @@ const userRouter = express.Router();
 
 
 
-userRouter.get("/user/request/recieved" ,userAuth , async (req , res )=>{
+userRouter.get("/user/request/received" ,userAuth , async (req , res )=>{
   try{
 
     const loggedUser = req.user;

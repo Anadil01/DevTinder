@@ -14,7 +14,7 @@ function Request() {
     const fetchReviewRequest = async ()=>{
 
     try{
-    const res = await axios.get(`${baseUrl}/user/request/recieved` , {withCredentials:true});
+    const res = await axios.get(`${baseUrl}/user/request/received` , {withCredentials:true});
 
 
 
