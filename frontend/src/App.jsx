@@ -1,10 +1,8 @@
-import { BrowserRouter, Routes, Route , Navigate} from "react-router-dom";
+import { createBrowserRouter, RouterProvider , Navigate} from "react-router-dom";
 import { useEffect , useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-import Navbar from "./component/Navbar";
-import Footer from "./component/Footer";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
@@ -12,9 +10,14 @@ import ProtectedRoute from "./component/ProtectedRoute";
 import Connection from "./pages/Connection";
 import Request from "./pages/Request";
 import Signup from "./pages/Signup";
+import Chat from "./pages/Chat";
+
 
 import { addUser } from "./utils/userSlice";
 import { baseUrl } from "./utils/constant";
+import AuthLayout from "./layouts/AuthLayout";
+import MainLayout from "./layouts/MainLayout";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -32,10 +35,11 @@ function App() {
         dispatch(addUser(res.data));
       } catch (error) {
         if (error.response?.status === 401) {
-          dispatch(addUser(null));
-      }
-        
-      }finally {
+            dispatch(addUser(null));
+        } else {
+            console.error(error);
+        }
+    }finally {
       setLoading(false);
     }
     };
@@ -48,26 +52,63 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-    <div className="min-h-screen flex flex-col">
-        <Navbar />
-
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" replace/>} />
-
-            <Route path="/login" element={ user ? <Navigate to="/feed" replace/> : <Login />} />
-            <Route path="/signup" element={ user ? <Navigate to="/feed" replace/> : <Signup />} />
-            <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
-            <Route path="/feed" element={<ProtectedRoute> <Feed/> </ProtectedRoute>} />
-            <Route path="/requests" element={<ProtectedRoute><Request/></ProtectedRoute>} />
-            <Route path="/connections" element={<ProtectedRoute><Connection/></ProtectedRoute>}/>
-          </Routes>
-        </main>
-        <Footer />
-        </div>
-    </BrowserRouter>
+    <RouterProvider router={router}/>
   );
-}
+};
+
+const router = createBrowserRouter([
+  {
+    element:<AuthLayout/>,
+    children:[
+      {
+      path: "/",
+      element: <Navigate to="/login" replace />
+      },
+      {
+        path:"/login",
+        element:<Login/>
+      },
+      {
+        path:"/signup",
+        element:<Signup/>
+      }
+    ],
+  },
+  {
+    element:<MainLayout/>,
+    children:[
+      {
+        element:<ProtectedRoute/>,
+        children:[
+          {
+            path:"/",
+            element:<Navigate path="/feed" replace/>
+          },
+          {
+            path:"/profile",
+            element:<Profile/>
+          },
+          {
+            path:"/feed",
+            element:<Feed/>
+          },
+          {
+            path:"/requests",
+            element:<Request/>
+          },
+          {
+            path:"/connections",
+            element:<Connection/>
+          },
+          {
+            path:"/chat/:id",
+            element:<Chat/>
+          }
+        ]
+      } 
+    ]
+  }
+]);
+
 
 export default App;
