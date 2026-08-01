@@ -20,6 +20,7 @@ const initializeSocket = (Server)=>{
 
 
      socket.on("sendMessage" , ({userId , targetId , newMessage})=>{
+        console.log(newMessage);
          const roomId = [userId ,targetId].sort().join("_");
          io.to(roomId).emit("messageReceived", {
             id: Date.now(),
@@ -29,7 +30,7 @@ const initializeSocket = (Server)=>{
      });
 
      socket.on("disconnect" , ()=>{
-
+         
      });
     });
 

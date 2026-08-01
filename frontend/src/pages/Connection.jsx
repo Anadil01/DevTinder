@@ -6,7 +6,6 @@ import { addConnection } from "../utils/connectionSlice";
 import { useNavigate } from "react-router-dom";
 
 
-
 function Connection() {
     const dispatch = useDispatch();
     const navigate = useNavigate();

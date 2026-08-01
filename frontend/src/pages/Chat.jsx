@@ -1,28 +1,38 @@
 import { use, useEffect, useState , useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams  } from "react-router-dom";
 import createSocketConnection from "../utils/socket";
 import {useSelector} from "react-redux";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
-
-
+ 
+    
+    
     const {targetId} = useParams();
     const user = useSelector((store) => store.user);
-    const userId = user?._id;
+    const connections = useSelector((store) => store.connection);
 
+    const targetUser = connections.find(
+      (user) => user._id === targetId
+    );
+
+    const userId = user?._id;
+  
     const socketRef = useRef(null);
 
     useEffect(()=>{
       if(!userId){
         return
       };
+
+
       socketRef.current = createSocketConnection();
 
-      socketRef.current.emit("joinChat" , {userId ,targetId });
+      socketRef.current.emit("joinChat" , {userId ,targetId});
 
       socketRef.current.on("messageReceived" , (message)=>{
+        console.log("Received:", message);
        setMessages(prev => [...prev , message]);
       });
 
@@ -43,23 +53,15 @@ function Chat() {
         });
         setNewMessage("");
       }
-    
 
-     // Dummy messages
-  // const message = [
-  //   { id: 1, text: "Hi!", sender: "other" },
-  //   { id: 2, text: "Hello 👋", sender: "me" },
-  //   { id: 3, text: "How are you?", sender: "other" },
-  //   { id: 4, text: "I'm doing great!", sender: "me" },
-  // ];
 
     return ( 
         <div className="min-h-screen bg-slate-700 flex justify-center py-6">
         <div className="w-full max-w-3xl bg-slate-900 rounded-xl shadow-lg flex flex-col h-[90vh]">
       {/* Header */}
       <div className="bg-slate-800 p-4 shadow-md">
-        <h1 className="text-xl font-semibold text-green-500">
-          Chat with: {targetId}
+        <h1 className="text-xl font-semibold text-blue-500">
+          Chat with: {targetUser?.firstName}
         </h1>
       </div>
 
@@ -69,7 +71,7 @@ function Chat() {
           <div
             key={msg.id}
             className={`flex ${
-              msg.sender === "me"
+              msg.sender === userId
                 ? "justify-end"
                 : "justify-start"
             }`}

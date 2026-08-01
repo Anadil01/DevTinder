@@ -101,7 +101,7 @@ const router = createBrowserRouter([
             element:<Connection/>
           },
           {
-            path:"/chat/:id",
+            path:"/chat/:targetId",
             element:<Chat/>
           }
         ]
