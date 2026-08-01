@@ -1,17 +1,57 @@
-import { useState } from "react";
+import { use, useEffect, useState , useRef } from "react";
 import { useParams } from "react-router-dom";
+import createSocketConnection from "../utils/socket";
+import {useSelector} from "react-redux";
 
 function Chat() {
-    const [message , setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState("");
+
+
     const {targetId} = useParams();
+    const user = useSelector((store) => store.user);
+    const userId = user?._id;
+
+    const socketRef = useRef(null);
+
+    useEffect(()=>{
+      if(!userId){
+        return
+      };
+      socketRef.current = createSocketConnection();
+
+      socketRef.current.emit("joinChat" , {userId ,targetId });
+
+      socketRef.current.on("messageReceived" , (message)=>{
+       setMessages(prev => [...prev , message]);
+      });
+
+      return () => {
+        socketRef.current.off("messageReceived");
+        socketRef.current.disconnect();
+      };
+
+    }, [userId , targetId]);
+
+
+    // handle function
+     const sendMessage = ()=>{
+      socketRef.current.emit("sendMessage" , {
+          userId ,
+          targetId ,
+          newMessage
+        });
+        setNewMessage("");
+      }
+    
 
      // Dummy messages
-  const messages = [
-    { id: 1, text: "Hi!", sender: "other" },
-    { id: 2, text: "Hello 👋", sender: "me" },
-    { id: 3, text: "How are you?", sender: "other" },
-    { id: 4, text: "I'm doing great!", sender: "me" },
-  ];
+  // const message = [
+  //   { id: 1, text: "Hi!", sender: "other" },
+  //   { id: 2, text: "Hello 👋", sender: "me" },
+  //   { id: 3, text: "How are you?", sender: "other" },
+  //   { id: 4, text: "I'm doing great!", sender: "me" },
+  // ];
 
     return ( 
         <div className="min-h-screen bg-slate-700 flex justify-center py-6">
@@ -19,7 +59,7 @@ function Chat() {
       {/* Header */}
       <div className="bg-slate-800 p-4 shadow-md">
         <h1 className="text-xl font-semibold text-green-500">
-          Chat with {targetId}
+          Chat with: {targetId}
         </h1>
       </div>
 
@@ -36,8 +76,8 @@ function Chat() {
           >
             <div
               className={`max-w-xs px-4 py-2 rounded-2xl text-white ${
-                msg.sender === "me"
-                  ? "bg-blue-600 rounded-br-none"
+                msg.sender === userId? 
+                    "bg-blue-600 rounded-br-none"
                   : "bg-slate-700 rounded-bl-none"
               }`}
             >
@@ -52,12 +92,12 @@ function Chat() {
         <input
           type="text"
           placeholder="Type a message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
           className="flex-1 bg-slate-700 text-white px-4 py-2 rounded-lg outline-none"
         />
 
-        <button
+        <button onClick={sendMessage}
           className="bg-blue-600 hover:bg-blue-700 px-6 rounded-lg"
         >
           Send
@@ -65,7 +105,7 @@ function Chat() {
       </div>
       </div>
     </div>
-     );
-}
+    )};
+
 
 export default Chat;
