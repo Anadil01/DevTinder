@@ -2,6 +2,8 @@ import { use, useEffect, useState , useRef } from "react";
 import { useParams  } from "react-router-dom";
 import createSocketConnection from "../utils/socket";
 import {useSelector} from "react-redux";
+import axios from "axios";
+import { baseUrl } from "../utils/constant";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -46,6 +48,7 @@ function Chat() {
 
     // handle function
      const sendMessage = ()=>{
+      if (!newMessage.trim()) return;
       socketRef.current.emit("sendMessage" , {
           userId ,
           targetId ,
@@ -53,6 +56,16 @@ function Chat() {
         });
         setNewMessage("");
       }
+
+      useEffect(()=>{
+
+        const getMessage = async ()=>{
+        const res = await axios.get(`${baseUrl}/chat/${targetId}` , {withCredentials:true});
+        console.log(res.data);
+        setMessages(res.data);
+        };
+        getMessage();
+      },[targetId]);
 
 
     return ( 
@@ -69,9 +82,9 @@ function Chat() {
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg) => (
           <div
-            key={msg.id}
+          key={msg._id || msg.id}
             className={`flex ${
-              msg.sender === userId
+              String(msg.sender) === String(userId)
                 ? "justify-end"
                 : "justify-start"
             }`}

@@ -1,5 +1,5 @@
 const socket = require("socket.io");
-
+const Message = require("../models/message");
 
 const initializeSocket = (Server)=>{
     const io = socket(Server , {
@@ -19,20 +19,37 @@ const initializeSocket = (Server)=>{
      });
 
 
-     socket.on("sendMessage" , ({userId , targetId , newMessage})=>{
+     socket.on("sendMessage" , async ({userId , targetId , newMessage})=>{
         console.log(newMessage);
-         const roomId = [userId ,targetId].sort().join("_");
-         io.to(roomId).emit("messageReceived", {
-            id: Date.now(),
-            text: newMessage,
-            sender: userId,
-          });
+        try{
+            const roomId = [userId ,targetId].sort().join("_");
+            
+            const message = await Message.create({
+                sender:userId,
+                receiver:targetId,
+                text:newMessage
+            });
+
+            io.to(roomId).emit("messageReceived", {
+            _id: message._id,
+            text: message.text,
+            sender: message.sender,
+            receiver: message.receiver,
+            createdAt: message.createdAt,
+             });
+   
+        }catch(error){
+            console.log(error);
+        }
+         
      });
 
      socket.on("disconnect" , ()=>{
          
      });
     });
+
+    return io;
 
 }
 
