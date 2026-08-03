@@ -4,10 +4,12 @@ import axios from "axios";
 import {baseUrl} from "../utils/constant";
 import {useDispatch} from "react-redux";
 import {addUser} from '../utils/userSlice';
+import {toast} from "react-toastify";
 
 export default function Login() {
   const [emailId , setEmailId] = useState("");
   const [password , setPassword] = useState("");
+  const [error , setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,10 +20,11 @@ export default function Login() {
       const res = await axios.post(`${baseUrl}/login` , {emailId , password}, {withCredentials:true});
       dispatch(addUser(res.data));
 
-      
-     navigate("/feed")
+     toast.success("Welcome back");
+     navigate("/feed");
     }catch(error){
       console.log(error.response?.data || error.message);
+      setError(error.response?.data);
     }
   }
 
@@ -68,7 +71,7 @@ export default function Login() {
               onChange={(e)=> setPassword(e.target.value)}
             />
           </div>
-
+           <p className="text-red-600">{error}</p>
           <button 
            type="button"
             className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-lg transition"

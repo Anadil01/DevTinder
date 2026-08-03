@@ -4,6 +4,7 @@ import { baseUrl } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import UserCard from "./UserCard";
+import { toast } from "react-toastify";
 
 
 
@@ -37,8 +38,10 @@ function EditProfile() {
                 {firstName , lastName, age , gender, photoUrl , about } , {withCredentials:true});
 
           dispatch(addUser(res.data));
+          toast.success("Profile Updated Sucessfully");
         }catch(error){
-         console.log(error);
+         console.log(error.response?.data);
+         toast.error(error.response?.data);
         }
     }
 

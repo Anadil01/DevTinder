@@ -3,6 +3,7 @@ import {baseUrl} from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import { useState } from "react";
+import {toast} from "react-toastify";
 
 function UserCard({ user }) {
   const [loading , setLoading] = useState(false);
@@ -16,18 +17,21 @@ function UserCard({ user }) {
       setLoading(true);
 
       setAnimate(
-        status === "interested" ? "translate-x-full" : "-translate-x-full"
+        status === "interested" ? "translate-x-full rotate-12 opacity-0" : "-translate-x-full rotate-12 opacity-0"
       );
 
-
      await axios.post(`${baseUrl}/request/send/${status}/${toUserId}`,{}, {withCredentials:true});
-
+      
+     setTimeout(() => {
       dispatch(removeUserFromFeed(toUserId));
-   
-
+    },300);
+      
+    status === "interested" ? toast.success("Request send") : toast.error("rejeted");
     }catch(error){
       console.log(error.response?.data || error.message);
+      toast.error(error.response?.data);
     }finally {
+      setAnimate("");
       setLoading(false);
     }
   }
@@ -35,7 +39,7 @@ function UserCard({ user }) {
   
   return (
     <div className={`relative w-80 h-[560px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900
-      transition-transform duration-300 ${animate}`}>
+      transition-all duration-300 ease-in-out ${animate}`}>
 
       <img
         src={user.photoUrl}

@@ -4,6 +4,7 @@ import { baseUrl } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 
@@ -14,16 +15,18 @@ function Signup() {
     const [lastName , setLastName] = useState("");
     const [emailId , setEmailId] = useState("");
     const [password , setPassword] = useState("");
+    const [error , setError] = useState("");
 
 
     const handleSignup = async ()=>{
       try{
         const res = await axios.post(`${baseUrl}/signup`,{firstName , lastName , emailId , password}, {withCredentials:true});
         dispatch(addUser(res.data));
-
+        toast.success("Welcome To DevTinder");
         navigate("/feed");
       }catch(error){
-        error.response?.data || error.message
+        console.log(error.response?.data || error.message);
+        setError(error.response?.data);
       }  
     }
    
@@ -97,7 +100,7 @@ function Signup() {
               onChange={(e)=> setPassword(e.target.value)}
             />
           </div>
-
+           <p className="text-red-600">{error}</p>
           <button 
            type="button"
             className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-lg transition"
