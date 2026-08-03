@@ -53,10 +53,6 @@ function UserCard({ user }) {
           {user.firstName} {user.lastName}
         </h1>
 
-        <p className="text-cyan-400 mt-1">
-          Full Stack Developer
-        </p>
-
         <p className="text-gray-300 mt-4 line-clamp-3">
           {user.about}
         </p>
@@ -72,7 +68,7 @@ function UserCard({ user }) {
           ))}
         </div>
 
-        <div className="mt-5 text-gray-400">
+        <div className="mt-1 text-gray-400 flex gap-2">
           <p>Age: {user.age}</p>
           <p>{user.gender}</p>
         </div>

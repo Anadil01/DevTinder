@@ -18,7 +18,7 @@ function Request() {
 
     dispatch(addRequest(res.data.data));
     }catch(error){
-        console.log(error);
+        console.log(error.response?.data);
     }   
     }
 
@@ -36,7 +36,7 @@ function Request() {
         }
     }
 
-    if (!request) return null;
+    if (!request) return<h1>You don't have any request</h1>;
 
     return ( 
         <div className="flex flex-col items-center mt-10">

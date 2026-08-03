@@ -22,6 +22,8 @@ function Connection() {
     useEffect(()=>{
         fetchConnections();
     },[]);
+
+    
     if(!connections)return<h1>You dont have connection!</h1>
     return ( 
         <div className="max-w-3xl mx-auto mt-10">
