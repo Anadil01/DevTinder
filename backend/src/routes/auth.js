@@ -30,8 +30,8 @@ authRouter.post("/signup" , async (req ,res)=>{
 
     res.cookie("token" , token ,{
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none",
+        secure: true,
     });
    
     
@@ -72,8 +72,8 @@ authRouter.post("/login" , async (req , res)=>{
 
         res.cookie("token", token , {
             httpOnly: true,
-            sameSite: "lax",
-            secure: false,
+            sameSite: "none",
+            secure:true,
           });
         res.send(user);
     }else{
@@ -88,7 +88,11 @@ authRouter.post("/login" , async (req , res)=>{
 
 
 authRouter.post("/logout" , async (req , res) =>{
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+    });
 
     res.status(200).json({
         message: "Logout successfully",
