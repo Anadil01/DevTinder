@@ -1,117 +1,350 @@
-# DevTinder
+# 🚀 DevTinder
 
-DevTinder is a full-stack developer networking app. Users can create a profile, discover other developers, send or review connection requests, manage their connections, and chat with accepted connections in real time.
+A full-stack developer networking platform inspired by Tinder, where developers can discover, connect, and chat with each other in real time.
 
-## Features
+Built with the MERN Stack, JWT Authentication, Socket.IO, MongoDB, and deployed on AWS EC2 with Nginx, PM2, HTTPS (Let's Encrypt), and Vercel.
 
-- Email/password signup and login with JWT authentication stored in HTTP-only cookies
-- Editable developer profiles with bio, skills, photo, age, and gender
-- Paginated developer feed
-- Send interest or ignore requests; accept or reject incoming requests
-- View accepted connections
-- Persistent one-to-one chat with real-time Socket.IO messages
+---
 
-## Tech stack
+## 🌐 Live Demo
 
-| Area | Technologies |
-| --- | --- |
+### Frontend
+https://devtinder-sepia.vercel.app
+
+### Backend API
+https://api-devtinder.2bd.net
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+- Secure Email & Password Authentication
+- JWT Authentication
+- HTTP-only Secure Cookies
+- Protected Routes
+- Logout Functionality
+
+### 👤 Profile Management
+- Create Developer Profile
+- Edit Profile
+- Update Password
+- Upload Profile Photo
+- Skills, Bio, Age & Gender
+
+### ❤️ Developer Matching
+- Infinite Developer Feed
+- Pagination Support
+- Interested / Ignore Requests
+- Accept / Reject Requests
+- Connection Management
+
+### 💬 Real-Time Chat
+- One-to-One Messaging
+- Socket.IO
+- Persistent Chat History
+- Messages Stored in MongoDB
+
+### 🚀 Production Deployment
+- AWS EC2
+- Nginx Reverse Proxy
+- PM2 Process Manager
+- HTTPS using Let's Encrypt
+- Vercel Frontend
+- Secure Cross-Origin Authentication
+- Cookie-based Authentication
+
+---
+
+# 🛠 Tech Stack
+
+| Layer | Technologies |
+|--------|-------------|
 | Frontend | React 19, Vite, React Router, Redux Toolkit, Axios, Tailwind CSS |
-| Backend | Node.js, Express, Mongoose, JWT, bcrypt, Socket.IO |
-| Database | MongoDB |
+| Backend | Node.js, Express.js, JWT, bcrypt.js, Socket.IO |
+| Database | MongoDB, Mongoose |
+| Deployment | AWS EC2, Nginx, PM2, Vercel, Let's Encrypt |
+| Authentication | JWT + HTTP-only Cookies |
+| Version Control | Git & GitHub |
 
-## Project structure
+---
+
+# 📂 Project Structure
 
 ```text
-DevTinder/
-├── frontend/             # React client
-│   └── src/
-│       ├── pages/        # Feed, profile, requests, connections, and chat
-│       ├── component/    # Reusable UI and route protection
-│       └── utils/        # Redux store, API URL, and Socket.IO client
-└── backend/              # Express API and Socket.IO server
-    └── src/
-        ├── models/       # User, connection request, and message schemas
-        ├── routes/       # Auth, profile, feed, requests, and chat endpoints
-        └── middlewares/  # JWT cookie authentication
+DevTinder
+│
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── utils
+│   │   ├── store
+│   │   └── hooks
+│
+├── backend
+│   ├── src
+│   │   ├── config
+│   │   ├── middlewares
+│   │   ├── models
+│   │   ├── routes
+│   │   ├── utils
+│   │   └── app.js
+│
+└── README.md
 ```
 
-## Prerequisites
+---
 
-- Node.js 18 or newer
-- MongoDB (local instance or MongoDB Atlas connection string)
+# 🔄 Application Flow
 
-## Getting started
+```text
+React App
+      │
+      ▼
+Axios (withCredentials)
+      │
+      ▼
+Express API
+      │
+JWT Cookie Authentication
+      │
+      ▼
+MongoDB
+      │
+      ▼
+Socket.IO
+      │
+      ▼
+Real-Time Chat
+```
 
-1. Clone the repository and enter it.
+---
 
-   ```bash
-   git clone <repository-url>
-   cd DevTinder
-   ```
+# ⚙️ Local Setup
 
-2. Configure the backend environment in `backend/.env`.
+## Clone Repository
 
-   ```env
-   MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>
-   JWT_SECRET=replace-with-a-long-random-secret
-   ```
+```bash
+git clone https://github.com/Anadil01/DevTinder.git
 
-3. Install dependencies and start the API server.
+cd DevTinder
+```
 
-   ```bash
-   cd backend
-   npm install
-   npm run dev
-   ```
+---
 
-   The API and Socket.IO server run at `http://localhost:7777`.
+## Backend
 
-4. In a second terminal, install dependencies and start the frontend.
+```bash
+cd backend
 
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+npm install
 
-5. Open the URL shown by Vite (normally `http://localhost:5173`).
+npm run dev
+```
 
-The frontend API URL is currently set to `http://localhost:7777` in `frontend/src/utils/constant.js`. If you use another backend host or port, update that value and the backend CORS configuration in `backend/src/app.js` and `backend/src/utils/scoket.js`.
+Create `.env`
 
-## Available commands
+```env
+PORT=7777
 
-| Location | Command | Purpose |
-| --- | --- | --- |
-| `backend` | `npm run dev` | Run the Express server with Nodemon |
-| `frontend` | `npm run dev` | Start the Vite development server |
-| `frontend` | `npm run build` | Create a production build |
-| `frontend` | `npm run lint` | Run ESLint |
-| `frontend` | `npm run preview` | Preview the production build |
+MONGODB_URI=your_mongodb_uri
 
-## API overview
+JWT_SECRET=your_secret_key
+```
 
-Protected endpoints require the authentication cookie created during signup or login.
+---
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| POST | `/signup` | Create an account |
-| POST | `/login` | Sign in |
-| POST | `/logout` | Sign out |
-| GET | `/profile/view` | Get the signed-in profile |
-| PATCH | `/profile/edit` | Update profile details |
-| PATCH | `/profile/password` | Change password |
-| GET | `/feed?page=1&limit=10` | Get discoverable developers |
-| POST | `/request/send/:status/:toUserId` | Send an `interested` or `ignored` request |
-| POST | `/request/review/:status/:requestId` | Mark an incoming request `accepted` or `rejected` |
-| GET | `/user/request/received` | List pending incoming requests |
-| GET | `/user/connections` | List accepted connections |
-| GET | `/chat/:targetId` | Get chat history with a user |
+## Frontend
 
-## Real-time chat
+```bash
+cd frontend
 
-The client joins a room named from the two participant IDs, then emits `sendMessage` events. The server saves each message to MongoDB and broadcasts a `messageReceived` event to everyone in that room.
+npm install
 
-## Notes
+npm run dev
+```
 
-- The backend listens on port `7777` and only permits the local Vite origin by default.
-- For a production deployment, configure HTTPS, secure cookies, environment-specific CORS origins, and a strong `JWT_SECRET`.
+Create `.env`
+
+```env
+VITE_BASE_URL=http://localhost:7777
+```
+
+---
+
+# 🌍 Production Environment
+
+### Backend
+
+```env
+PORT=7777
+
+MONGODB_URI=your_production_database
+
+JWT_SECRET=your_secret
+```
+
+### Frontend
+
+```env
+VITE_BASE_URL=https://api-devtinder.2bd.net
+```
+
+---
+
+# 🔐 Authentication Flow
+
+```text
+User Login
+     │
+     ▼
+JWT Generated
+     │
+     ▼
+Stored as HTTP-only Secure Cookie
+     │
+     ▼
+Browser Sends Cookie Automatically
+     │
+     ▼
+Express Middleware
+     │
+     ▼
+JWT Verification
+     │
+     ▼
+Protected Routes
+```
+
+---
+
+# 🌐 API Endpoints
+
+## Authentication
+
+| Method | Endpoint |
+|----------|----------|
+| POST | `/signup` |
+| POST | `/login` |
+| POST | `/logout` |
+
+---
+
+## Profile
+
+| Method | Endpoint |
+|----------|----------|
+| GET | `/profile/view` |
+| PATCH | `/profile/edit` |
+| PATCH | `/profile/password` |
+
+---
+
+## Feed
+
+| Method | Endpoint |
+|----------|----------|
+| GET | `/feed?page=1&limit=10` |
+
+---
+
+## Requests
+
+| Method | Endpoint |
+|----------|----------|
+| POST | `/request/send/:status/:toUserId` |
+| POST | `/request/review/:status/:requestId` |
+| GET | `/user/request/received` |
+| GET | `/user/connections` |
+
+---
+
+## Chat
+
+| Method | Endpoint |
+|----------|----------|
+| GET | `/chat/:targetId` |
+
+---
+
+# 🚀 Deployment Architecture
+
+```text
+                Vercel
+                   │
+                   ▼
+          React Frontend
+                   │
+                   ▼
+HTTPS Requests
+                   │
+                   ▼
+      AWS EC2 Ubuntu Server
+                   │
+                   ▼
+              Nginx
+                   │
+                   ▼
+         Node.js + Express
+                   │
+         JWT Authentication
+                   │
+                   ▼
+             MongoDB Atlas
+                   │
+                   ▼
+          Socket.IO Server
+```
+
+---
+
+# 🔒 Security
+
+- JWT Authentication
+- HTTP-only Cookies
+- Secure Cookies
+- SameSite=None
+- Password Hashing (bcrypt)
+- Protected Routes
+- CORS Configuration
+- HTTPS using Let's Encrypt
+
+---
+
+# 📦 Deployment
+
+- Frontend → Vercel
+- Backend → AWS EC2
+- Reverse Proxy → Nginx
+- Process Manager → PM2
+- SSL Certificate → Let's Encrypt
+- Database → MongoDB Atlas
+
+---
+
+# Future Improvements
+
+- Google Authentication
+- GitHub Authentication
+- Profile Verification
+- Online Status
+- Typing Indicator
+- Push Notifications
+- Video Calling
+- AI Profile Recommendation
+- Advanced Search & Filters
+- Docker Deployment
+- CI/CD with GitHub Actions
+
+---
+
+# 👨‍💻 Author
+
+**Anadil Gazi**
+
+GitHub: https://github.com/Anadil01
+
+LinkedIn: *(Add your LinkedIn URL here)*
+
+---
