@@ -22,9 +22,24 @@ export default function Login() {
 
      toast.success("Welcome back");
      navigate("/feed");
-    }catch(error){
-      console.log(error.response?.data || error.message);
-      setError(error.response?.data);
+    }catch (err) {
+      console.log("Full error:", err.response?.data || err.message);
+      
+      const errorData = err.response?.data;
+      
+      // Safely extract a string message, no matter what format the backend sends
+      let errorMessage = "An unexpected error occurred";
+      
+      if (typeof errorData === "string") {
+        errorMessage = errorData; // If backend sent a plain text string
+      } else if (errorData && typeof errorData === "object") {
+        // If backend sent an object like { error: "...", message: "..." }
+        errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+      } else {
+        errorMessage = err.message; // Fallback to Axios error
+      }
+    
+      setError(errorMessage);
     }
   }
 
