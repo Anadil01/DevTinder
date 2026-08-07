@@ -31,6 +31,7 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", chatRouter);
+app.set('trust proxy', 1);
 
 const Server = http.createServer(app);
 

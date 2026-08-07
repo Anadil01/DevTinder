@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/:path*",
+        "destination": "https://api-devtinder.2bd.net/:path*"
+      }
+    ]
+  }
