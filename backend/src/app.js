@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({
     origin:[
    "http://localhost:5173",
-    "https://dev-tinder-dusky.vercel.app",
+    "https://devtinder-sepia.vercel.app",
     ],
     credentials:true
 }));
