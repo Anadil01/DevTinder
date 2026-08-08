@@ -4,7 +4,11 @@ const Message = require("../models/message");
 const initializeSocket = (Server)=>{
     const io = socket(Server , {
         cors:{
-            origin:"http://localhost:5173"
+            origin: [
+                "http://localhost:5173",
+                "https://devtinder-sepia.vercel.app"
+            ],
+            credentials: true
         }
     });
     
@@ -45,7 +49,7 @@ const initializeSocket = (Server)=>{
      });
 
      socket.on("disconnect" , ()=>{
-         
+        console.log("Socket disconnected:", socket.id);
      });
     });
 

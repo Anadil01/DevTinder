@@ -1,19 +1,12 @@
-![React](https://img.shields.io/badge/React-19-blue)
-
-![Node.js](https://img.shields.io/badge/Node.js-Express-green)
-
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
-
-![Socket.IO](https://img.shields.io/badge/Socket.IO-Real--Time-black)
-
-![AWS](https://img.shields.io/badge/AWS-EC2-orange)
-
-![License](https://img.shields.io/badge/License-MIT-blue)
-
 # 🚀 DevTinder
 
 DevTinder is a production-ready developer networking platform that enables developers to discover, connect, and chat in real time. Built with the MERN Stack and deployed on AWS EC2 with secure JWT authentication, Socket.IO, Nginx, PM2, and HTTPS.
 
+![React](https://img.shields.io/badge/React-19-blue) ![Node.js](https://img.shields.io/badge/Node.js-Express-green
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-Real--Time-black)
+![AWS](https://img.shields.io/badge/AWS-EC2-orange)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 
 ---
